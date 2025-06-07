@@ -1,0 +1,59 @@
+# A linha 'version' não é mais necessária nas versões recentes do Docker Compose
+# version: '3.8'
+
+services:
+  # O backend agora é acessado apenas internamente pela rede do Docker
+  backend:
+    build:
+      context: ./backend
+    # A seção 'ports' foi removida. O Nginx se comunicará com o backend
+    # diretamente pela rede 'app-network' na porta 5000.
+    environment:
+      DB_USER: ${POSTGRES_USER}      # Pega de .env.development / .env.production
+      DB_PASSWORD: ${POSTGRES_PASSWORD} # Pega de .env.development / .env.production
+      DB_NAME: ${POSTGRES_DB}        # Pega de .env.development / .env.production
+      DB_HOST: db                    # Nome do serviço do banco de dados na rede Docker
+      DB_PORT: 5432                  # Porta interna padrão do PostgreSQL
+      PORT: 5000                     # Porta que seu aplicativo Node.js escuta (internamente)
+    depends_on:
+      - db
+    networks:
+      - app-network
+    volumes:
+      - ./backend:/app # Mapeia a pasta 'backend' do seu host para '/app' dentro do container
+
+  # O frontend (Nginx) é o único ponto de entrada para o usuário
+  frontend:
+    build:
+      context: ./frontend
+    ports:
+      # Expõe a porta 6000 do seu computador para a porta 6000 do contêiner Nginx
+      - "8080:80"
+    depends_on:
+      # Garante que o frontend só suba depois que o backend estiver pronto,
+      # o que é uma boa prática para o proxy reverso.
+      - backend
+    networks:
+      - app-network
+
+  # O banco de dados continua como estava
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+      # Esta porta é opcional. É útil para conectar uma ferramenta de banco de dados
+      # (como DBeaver, pgAdmin) diretamente ao container para depuração.
+      - "5432:5432"
+    networks:
+      - app-network
+
+volumes:
+  pgdata:
+
+networks:
+  app-network:

@@ -1,0 +1,10 @@
+node_modules
+appendix
+npm-debug.log
+Dockerfile
+db_passwd.ini
+.env.development
+.env.production
+.dockerignoreßuction
+.dockerignore
+.gitignore
