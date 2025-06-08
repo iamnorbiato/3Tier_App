@@ -55,16 +55,19 @@ Certifique-se de ter os seguintes softwares instalados em seu ambiente de desenv
 * **Um navegador (Safari, Chrome, Firefox):** Para acessar a aplicação web.
 ---
 
+---
+
 ## Estrutura do Projeto
 
 A estrutura de diretórios do projeto é a seguinte:
 
+```bash
 .
-├── .env.development       # Variáveis de ambiente para o Docker Compose (NÃO ENVIAR PARA O GIT!)
-├── docker-compose.yml     # Define e orquestra os serviços Docker
-├── .gitignore             # Arquivos e pastas a serem ignorados pelo Git
-├── backend/               # Contém o código-fonte da aplicação Node.js (Backend)
-│   ├── src/               # Código-fonte principal do Backend
+├── .env.development
+├── docker-compose.yml
+├── .gitignore
+├── backend/
+│   ├── src/
 │   │   ├── app.js
 │   │   ├── db.js
 │   │   ├── query.sql
@@ -72,17 +75,16 @@ A estrutura de diretórios do projeto é a seguinte:
 │   ├── package.json
 │   ├── package-lock.json
 │   └── Dockerfile
-└── frontend/              # Contém o código-fonte da aplicação React (Frontend)
-├── public/            # Arquivos estáticos que serão copiados para o build do React
-├── src/               # Código-fonte principal do React
-│   ├── App.js
-│   ├── index.css
-│   └── index.js
-├── package.json
-├── package-lock.json
-├── nginx.conf         # Configuração do Nginx para servir o React e proxyar APIs
-└── Dockerfile
-
+└── frontend/
+    ├── public/
+    ├── src/
+    │   ├── App.js
+    │   ├── index.css
+    │   └── index.js
+    ├── package.json
+    ├── package-lock.json
+    ├── nginx.conf
+    └── Dockerfile
 ---
 
 ## Configuração do Ambiente
