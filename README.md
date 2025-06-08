@@ -83,7 +83,6 @@ A estrutura de diretórios do projeto é a seguinte:
 ├── nginx.conf         # Configuração do Nginx para servir o React e proxyar APIs
 └── Dockerfile
 
-
 ---
 
 ## Configuração do Ambiente
