@@ -8,3 +8,4 @@ db_passwd.ini
 .dockerignoreßuction
 .dockerignore
 .gitignore
+.env.passos_para_o_git.txt

@@ -4,6 +4,8 @@ const express = require('express');
 const app = express();
 const { executeSqlAndFetchData } = require('./runme');
 const { getF1Teams } = require('./f1teams');
+const { getF1Drivers } = require('./f1drivers');
+
 const port = process.env.PORT || 5000;
 
 app.use(express.json());
@@ -24,6 +26,7 @@ app.get('/runme-data', async (req, res) => { // <--- Rota /runme-data, não /api
 });
 
 // Exemplo de uso: GET /f1teams?teamname=Ferrari&licensedin=Italy
+// --- NOVA ROTA PARA BUSCAR EQUIPES DE F1 ---
 app.get('/f1teams', async (req, res) => {
     // Pega os parâmetros 'teamname' e 'licensedin' da query string da URL
     const { teamname, licensedin } = req.query;
@@ -39,6 +42,27 @@ app.get('/f1teams', async (req, res) => {
     } catch (error) {
         console.error('Erro na rota /f1teams:', error);
         res.status(500).json({ error: 'Erro interno do servidor ao buscar equipes de F1.', details: error.message });
+    }
+});
+// --- FIM DA NOVA ROTA ---
+
+// Exemplo de uso: GET /f1drivers?nacionality=Brazil
+// --- NOVA ROTA PARA BUSCAR Pilotos DE F1 ---
+app.get('/f1drivers', async (req, res) => {
+    // Pega os parâmetros 'drivername' e 'nacionality' da query string da URL
+    const { drivername, nacionality } = req.query;
+
+    try {
+        // Chama a função getF1Drivers (que está em f1teams.js) com os parâmetros
+        const drivers = await getF1Drivers(drivername, nacionality);
+        res.json({
+            message: 'Pilotos de F1 encontradas.',
+            count: drivers.length,
+            data: drivers
+        });
+    } catch (error) {
+        console.error('Erro na rota /f1drivers:', error);
+        res.status(500).json({ error: 'Erro interno do servidor ao buscar pilotos de F1.', details: error.message });
     }
 });
 // --- FIM DA NOVA ROTA ---

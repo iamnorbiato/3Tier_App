@@ -1,22 +1,23 @@
-const { Client } = require('pg');
+// backend/src/db.js
+const { Pool } = require('pg');
 
-const db_connect = async () => {
-  const client = new Client({
-    host: String(process.env.DB_HOST),
-    port: Number(process.env.DB_PORT),
-    database: String(process.env.DB_NAME),
-    user: String(process.env.DB_USER),
-    password: String(process.env.DB_PASSWORD)
-  });
+const pool = new Pool({
+  host: process.env.DB_HOST,
+  port: Number(process.env.DB_PORT),
+  database: process.env.DB_NAME,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+});
 
-  try {
-    await client.connect();
-    console.log('Conectado ao banco de dados com sucesso');
-    return client;
-  } catch (err) {
-    console.error('Erro na conexão com o banco de dados:', err.stack);
-    throw err;
-  }
+pool.on('connect', () => {
+  console.log('Cliente conectado ao banco de dados pelo pool (via db.js)');
+});
+
+pool.on('error', (err) => {
+  console.error('Erro inesperado no pool de banco de dados (db.js)', err);
+  process.exit(-1);
+});
+
+module.exports = {
+  pool // Exporta a instância do pool diretamente
 };
-
-module.exports = { db_connect };
