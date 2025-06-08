@@ -13,5 +13,4 @@ from f1drivers
 WHERE
     ($1::text IS NULL OR Drivername ILIKE $1) AND -- <--- Com ::text aqui
     ($2::text IS NULL OR Nationality ILIKE $2)  -- <--- E com ::text aqui
-LIMIT 2
 ;
